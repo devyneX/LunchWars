@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="sm:bg-secondary sm:text-white sm:rounded-xl flex flex-col justify-center items-center sm:my-5">
+    <h1 class="text-3xl mt-5">{% block form_title %}{% endblock %}</h1>
+
+    <form method="POST" class="flex flex-col p-10 gap-4">
+        {% block form_content %}
+        {% csrf_token %}
+        {% for field in form %}
+        <div>
+            {{ field.label_tag }}
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <div class="flex justify-center items-center mt-5">
+            <button type="submit">{% block submit_button %}{% endblock %}</button>
+        </div>
+        {% endblock %}
+    </form>
+</div>
+{% endblock %}

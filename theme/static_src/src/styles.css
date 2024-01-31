@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+*,
+*:before,
+*:after {
+    @apply box-border;
+}
+
+* {
+    @apply font-sans;
+}
+
+button,
+button[type="button"],
+button[type="submit"],
+input[type="submit"],
+input[type="reset"] {
+    @apply bg-sky-800 px-3 py-2 rounded-lg mx-2 text-white;
+}
+
+[type="text"],
+[type="email"],
+[type="url"],
+[type="password"],
+[type="number"],
+[type="date"],
+[type="datetime-local"],
+[type="month"],
+[type="search"],
+[type="tel"],
+[type="time"],
+[type="week"],
+[multiple],
+textarea,
+select {
+    @apply text-black w-full px-5 rounded-xl border;
+}
