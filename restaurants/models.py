@@ -11,6 +11,7 @@ class Restaurant(models.Model):
     restaurant_represenative = models.OneToOneField(
         "accounts.RestaurantRepresentative",
         on_delete=models.CASCADE,
+        primary_key=True,
         related_name="restaurant",
     )
 

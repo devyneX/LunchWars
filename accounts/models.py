@@ -13,10 +13,17 @@ class User(AbstractUser):
 class Employee(models.Model):
     """Model for employee."""
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="employee", primary_key=True
+    )
 
 
 class RestaurantRepresentative(models.Model):
     """Model for restaurant representative."""
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="restaurant_representative",
+        primary_key=True,
+    )
