@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     "tailwind",
     "theme",
     "django_browser_reload",
+    "django_celery_beat",
     "accounts",
+    "wars",
 ]
 
 MIDDLEWARE = [
@@ -118,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Dhaka"
 
 USE_I18N = True
 
@@ -146,3 +148,7 @@ NPM_BIN_PATH = str(os.getenv("NPM_PATH"))
 
 # AUTH
 AUTH_USER_MODEL = "accounts.User"
+
+# CELERY
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
