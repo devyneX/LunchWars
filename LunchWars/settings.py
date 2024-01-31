@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "tailwind",
     "theme",
     "django_browser_reload",
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,6 @@ INTERNAL_IPS = [
 ]
 
 NPM_BIN_PATH = str(os.getenv("NPM_PATH"))
+
+# AUTH
+AUTH_USER_MODEL = "accounts.User"

@@ -2,10 +2,10 @@
 
 
 {% block content %}
-<div class="sm:bg-secondary sm:text-white sm:rounded-xl flex flex-col justify-center items-center sm:my-5">
-    <h1 class="text-3xl mt-5">{% block form_title %}{% endblock %}</h1>
+<div class="flex flex-col justify-center items-center sm:min-h-screen">
+    <form method="POST" class="sm:bg-secondary sm:text-white sm:rounded-xl flex flex-col p-10 gap-4 sm:my-5">
+        <h1 class="text-3xl text-center mt-5">{% block form_title %}{% endblock %}</h1>
 
-    <form method="POST" class="flex flex-col p-10 gap-4">
         {% block form_content %}
         {% csrf_token %}
         {% for field in form %}
