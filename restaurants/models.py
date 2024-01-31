@@ -8,7 +8,7 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=50)
     website = models.CharField(max_length=100)
     TIN = models.CharField(max_length=12)
-    restaurant_represenative = models.OneToOneField(
+    restaurant_representative = models.OneToOneField(
         "accounts.RestaurantRepresentative",
         on_delete=models.CASCADE,
         primary_key=True,

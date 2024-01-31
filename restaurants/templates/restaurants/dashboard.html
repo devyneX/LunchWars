@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="flex flex-col">
+    <div class="h-screen flex flex-col justify-center items-center">
+        Restaurant Name - {{ restaurant.name }}
+        <br />
+        Restaurant Representative - {{ restaurant.restaurant_representative.user.username }}
+    </div>
+    <div>
+        {% comment %}<a href="{% url 'account:update'}">Account Settings</a>{% endcomment %}
+        {% comment %}<a href="{% url 'restaurants:restaurant_update' restaurant.id %}">Update</a>{% endcomment %}
+        <a href="{% url 'restaurants:dishes' %}">Dishes</a>
+        <a href="{% url 'restaurants:add-dish' %}">Add Dish</a>
+        {% comment %}<a href="{% url 'wars:leaderboard' %}">Leaderboard</a>
+        <a href="{% url 'wars:create_menu' %}">Participate</a>{% endcomment %}
+    </div>
+</div>
+
+{% endblock %}

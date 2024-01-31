@@ -1,8 +1,10 @@
 """Views for the restaurants app."""
 from django.forms.models import BaseModelForm
-from django.http import HttpResponse
-from django.views.generic import CreateView, DetailView
+from django.http import HttpResponse, HttpRequest
+from django.views import View
+from django.views.generic import CreateView, ListView
 from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
 
 from . import utils
 from . import models
@@ -35,13 +37,59 @@ class RestaurantCreateView(CreateView, utils.RestaurantRepresetiveRequiredMixin)
         return self.invalid_tin(form, "TIN number is not valid.")
 
 
-class RestaurantDashboardView(DetailView, utils.RestaurantRepresetiveRequiredMixin):
+class RestaurantDashboardView(View, utils.RestaurantRepresetiveRequiredMixin):
     """View for showing Restaurant Details"""
 
-    model = models.Restaurant
-    template_name = "restaurants/restaurant_dashboard.html"
-    context_object_name = "restaurant"
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """Return the restaurant details."""
+        restaurant = utils.get_restaurant(request)
+        if not restaurant:
+            return redirect("restaurants:create")
+        return render(
+            request,
+            "restaurants/dashboard.html",
+            {"restaurant": restaurant},
+        )
 
-    def get_object(self, queryset: None) -> models.Restaurant:
-        """Get the restaurant for the logged in user."""
-        return utils.get_restaurant(self.request)
+
+class AddDishView(CreateView, utils.RestaurantRepresetiveRequiredMixin):
+    """View for adding a dish."""
+
+    model = models.Dish
+    fields = ["name", "description"]
+    success_url = reverse_lazy("restaurants:dashboard")
+    template_name = "restaurants/add_dish.html"
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        """Save the dish."""
+        restaurant = utils.get_restaurant(self.request)
+        form.instance.restaurant = restaurant
+        return super().form_valid(form)
+
+
+# class EditDishView(UpdateView, utils.RestaurantRepresetiveRequiredMixin):
+#     """View for editing a dish."""
+
+#     model = models.Dish
+#     fields = ["name", "description"]
+#     success_url = reverse_lazy("restaurants:dashboard")
+#     template_name = "restaurants/edit_dish.html"
+
+#     def get_queryset(self):
+#         """Get the dishes for the restaurant."""
+#         restaurant = utils.get_restaurant(self.request)
+#         return models.Dish.objects.filter(restaurant=restaurant)
+
+
+class DishListView(ListView, utils.RestaurantRepresetiveRequiredMixin):
+    """View for listing dishes."""
+
+    model = models.Dish
+    template_name = "restaurants/dishes.html"
+    context_object_name = "dishes"
+    success_url = reverse_lazy("restaurants:dishes")
+
+    def get_queryset(self):
+        """Get the dishes for the restaurant."""
+        restaurant = utils.get_restaurant(self.request)
+        return models.Dish.objects.filter(restaurant=restaurant)

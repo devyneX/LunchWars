@@ -1,11 +1,9 @@
 """Authentication views."""
 # from django.shortcuts import render
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
-from django.contrib import messages
 from django.views.generic import FormView
 from . import models
 from . import forms
@@ -48,11 +46,6 @@ class Login(LoginView):
 
     template_name = "accounts/login.html"
     redirect_authenticated_user = True
-
-    def form_invalid(self, form: AuthenticationForm) -> HttpResponse:
-        """If the form is invalid, show message to the user"""
-        messages.error(self.request, "Invalid username or password")
-        return super().form_invalid(form)
 
     def get_success_url(self) -> str:
         """Return success url."""

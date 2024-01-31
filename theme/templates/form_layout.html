@@ -3,11 +3,13 @@
 
 {% block content %}
 <div class="flex flex-col justify-center items-center sm:min-h-screen">
-    <form method="POST" class="sm:bg-secondary sm:text-white sm:rounded-xl flex flex-col p-10 gap-4 sm:my-5">
+    <form method="POST"
+        class="sm:bg-secondary sm:text-white sm:rounded-xl sm:max-w-min flex flex-col p-10 gap-4 sm:my-5">
         <h1 class="text-3xl text-center mt-5">{% block form_title %}{% endblock %}</h1>
 
         {% block form_content %}
         {% csrf_token %}
+        {{ form.non_field_errors }}
         {% for field in form %}
         <div>
             {{ field.label_tag }}
