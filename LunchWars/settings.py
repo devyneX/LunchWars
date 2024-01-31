@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "django_celery_beat",
     "accounts",
+    "restaurants",
     "wars",
 ]
 
