@@ -1,5 +1,4 @@
 """Authentication views."""
-# from django.shortcuts import render
 from django.contrib.auth import login
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -7,6 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.views.generic import FormView
 from . import models
 from . import forms
+from restaurants import models as restaurant_models
 
 
 class SignUpView(FormView):
@@ -34,11 +34,11 @@ class SignUpView(FormView):
 
     def get_success_url(self) -> str:
         """Return success url."""
-        # if self.request.user.is_employee:
-        #     return reverse_lazy("employee:dashboard")
+        if self.request.user.is_employee:
+            return reverse_lazy("employees:dashboard")
 
-        # if self.request.user.is_restaurant_representative:
-        #     return reverse_lazy("restaurant:dashboard")
+        if self.request.user.is_restaurant_representative:
+            return reverse_lazy("restaurants:create")
 
         return reverse_lazy("accounts:login")
 
@@ -53,9 +53,14 @@ class Login(LoginView):
         """Return success url."""
 
         if self.request.user.is_employee:
-            return reverse_lazy("employee:dashboard")
+            return reverse_lazy("employees:dashboard")
 
         if self.request.user.is_restaurant_representative:
-            return reverse_lazy("restaurant:dashboard")
+            if restaurant_models.Restaurant.objects.filter(
+                restaurant_representative=self.request.user.restaurant_representative
+            ).exists():
+                return reverse_lazy("restaurants:dashboard")
+            else:
+                return reverse_lazy("restaurants:create")
 
         return super().get_success_url()

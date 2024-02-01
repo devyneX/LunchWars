@@ -1,20 +1,22 @@
 {% extends "list_layout.html" %}
 
-{% block title %}Participants{% endblock %}
+{% block title %}Leaderboard{% endblock %}
 
-{% block list_title %}Participants{% endblock %}
+{% block list_title %}Leaderboard{% endblock %}
 
 {% block list_content %}
-{% for menu in menus %}
 <div class="w-full bg-white rounded-lg">
+    {% for menu in menus %}
     <div class=" p-4">
         <h2 class="text-2xl text-wrap font-semibold text-blue-500 hover:underline cursor-pointer"
             onclick="location.href=`{% url 'wars:menu-detail' menu.pk %}`">
             {{menu.title }} by {{ menu.restaurant.name }}
         </h2>
         <p class="text-sm text-gray-600">{{ menu.description }}</p>
+        <p>Votes: {{ menu.votes_count }}</p>
         <hr>
     </div>
+    {% endfor %}
+
 </div>
-{% endfor %}
 {% endblock %}

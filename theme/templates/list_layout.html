@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="w-screen">
-    <h1>{% block list_title %}{% endblock %}</h1>
-    <div class="flex flex-wrap justify-center items-start sm:mx-20">
+<div class="text-bold sm:w-9/12 flex flex-col items-center p-5 mt-10 bg-gray200 shadow-xl">
+    <h1 class="text-3xl">{% block list_title %}{% endblock %}</h1>
+    <div class="flex flex-wrap justify-center items-start sm:mx-20 mt-10">
         {% block list_content %}
         {% endblock %}
     </div>

@@ -3,19 +3,21 @@
 {% block title %}Menu{% endblock %}
 
 {% block content %}
-<div>
-    <h1>{{ menu.title }} by {{ menu.restaurant.name }}</h1>
-    <div>
-        <h2>Dishes</h2>
-        <ul>
-            {% for dish in dishes %}
-            <li>
-                {{ dish.name }}
-                {{ dish.description }}
-            </li>
-
-            {% endfor %}
-        </ul>
+<div class="text-bold sm:w-9/12 flex flex-col items-center p-5 mt-10 bg-gray200 shadow-xl">
+    <h1 class="text-3xl">{{ menu.title }} by {{ menu.restaurant.name }}</h1>
+    <p class="text-sm text-gray-600">{{ menu.description }}</p>
+    <div class="flex flex-wrap justify-center items-start sm:mx-20 mt-10">
+        {% for dish in dishes %}
+        <div class="w-full bg-white rounded-lg">
+            <div class=" p-4">
+                <h2 class="text-2xl text-wrap font-semibold text-blue-500 hover:underline cursor-pointer">
+                    {{ dish.name }}
+                </h2>
+                <p class="text-sm text-gray-600">{{ dish.description }}</p>
+                <hr>
+            </div>
+        </div>
+        {% endfor %}
     </div>
     {% if request.user.is_employee %}
     {% if voted %}

@@ -14,6 +14,38 @@ class War(models.Model):
         """Return today's war."""
         return cls.objects.get(date=timezone.now().date())
 
+    @classmethod
+    def eligible(cls, restaurant: "restaurants.Restaurant") -> bool:
+        """Check if a restaurant is eligible for the war."""
+        yesteday = timezone.now().date() - timezone.timedelta(days=1)
+        the_day_before = timezone.now().date() - timezone.timedelta(days=2)
+
+        winner_yesterday = cls.objects.filter(date=yesteday).first()
+        if winner_yesterday is None:
+            return True
+        winner_yesterday = (
+            winner_yesterday.menus.all()
+            .annotate(votes_count=models.Count("votes"))
+            .order_by("-votes_count")
+            .first()
+        )
+        winner_the_day_before = cls.objects.filter(date=the_day_before).first()
+        if winner_the_day_before is None:
+            return True
+        winner_the_day_before = (
+            winner_the_day_before.menus.all()
+            .annotate(votes_count=models.Count("votes"))
+            .order_by("-votes_count")
+            .first()
+        )
+
+        if (
+            restaurant.id
+            == winner_yesterday.restaurant.id
+            == winner_the_day_before.restaurant.id
+        ):
+            return False
+
 
 class Menu(models.Model):
     """Model for a menu."""

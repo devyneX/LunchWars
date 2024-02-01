@@ -30,7 +30,7 @@ class RestaurantCreateView(CreateView, utils.RestaurantRepresentiveRequiredMixin
         # validate TIN number
         is_tin_valid = utils.validate_tin(form.instance.TIN)
         if is_tin_valid:
-            form.instance.restaurant_represenative = (
+            form.instance.restaurant_representative = (
                 self.request.user.restaurant_representative
             )
             return super().form_valid(form)
@@ -57,6 +57,7 @@ class AddDishView(CreateView, utils.RestaurantRepresentiveRequiredMixin):
     """View for adding a dish."""
 
     model = models.Dish
+    fields = ["name", "description"]
     success_url = reverse_lazy("restaurants:dashboard")
     template_name = "restaurants/add_dish.html"
 

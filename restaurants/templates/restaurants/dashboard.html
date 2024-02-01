@@ -1,24 +1,15 @@
-{% extends "base.html" %}
+{% extends "dashboard_layout.html" %}
 
 {% load static %}
 
-{% block title %}Dashboard{% endblock %}
-
-{% block content %}
-<div class="flex flex-col">
-    <div class="h-screen flex flex-col justify-center items-center">
-        Restaurant Name - {{ restaurant.name }}
-        <br />
-        Restaurant Representative - {{ restaurant.restaurant_representative.user.username }}
-    </div>
-    <div>
-        {% comment %}<a href="{% url 'account:update'}">Account Settings</a>{% endcomment %}
-        {% comment %}<a href="{% url 'restaurants:restaurant_update' restaurant.id %}">Update</a>{% endcomment %}
-        <a href="{% url 'restaurants:dishes' %}">Dishes</a>
-        <a href="{% url 'restaurants:add-dish' %}">Add Dish</a>
-        {% comment %}<a href="{% url 'wars:leaderboard' %}">Leaderboard</a>
-        <a href="{% url 'wars:Participate' %}">Participate</a>{% endcomment %}
-    </div>
-</div>
-
+{% block dashboard_info %}
+<h4 class="text-xl font-semibold leading-normal mb-2 text-blue-700 mb-2">
+    Restaurant: {{ restaurant.name }}
+</h4>
+{% endblock %}
+{% block dashboard_links %}
+<button onclick="location.href=`{% url 'restaurants:dishes' %}`">Dishes</button>
+<button onclick="location.href=`{% url 'restaurants:add-dish' %}`">Add Dish</button>
+<button onclick="location.href=`{% url 'wars:participate' %}`">Participate</button>
+<button onclick="location.href=`{% url 'wars:leaderboard' %}`">Leaderboard</button>
 {% endblock %}

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "accounts",
     "restaurants",
     "wars",
+    "employees",
 ]
 
 MIDDLEWARE = [
@@ -133,6 +134,11 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+# Authentication
+AUTH_USER_MODEL = "accounts.User"
+LOGIN_URL = "/accounts/login/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -153,3 +159,7 @@ AUTH_USER_MODEL = "accounts.User"
 # CELERY
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+# TIN VALIDATOR
+TIN_VALIDATOR_URL = "https://api.tin-check.com/api.php"
+TIN_VALIDATOR_TOKEN = os.getenv("TIN_VALIDATOR_TOKEN")

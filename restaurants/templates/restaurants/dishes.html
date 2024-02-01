@@ -1,22 +1,20 @@
-{% extends "base.html" %}
+{% extends "list_layout.html" %}
 
 {% block title %}Dishes{% endblock %}
 
-{% block content %}
-<div class="flex flex-col">
-    {% for dish in dishes %}
-    <div class="h-screen flex flex-col justify-center items-center">
-        Dish Name - {{ dish.name }}
-        <br />
-        Dish Description - {{ dish.description }}
-        <br />
-        Dish Restaurant - {{ dish.restaurant.name }}
-        <br />
-        {% comment %}
-        <a href="{% url 'restaurants:dish_update' dish.id %}">Update</a>
-        <a href="{% url 'restaurants:dish_delete' dish.id %}">Delete</a>
-        {% endcomment %}
+{% block list_title %}Dishes{% endblock %}
+
+
+{% block list_content %}
+{% for dish in dishes %}
+<div class="w-full bg-white rounded-lg">
+    <div class=" p-4">
+        <h2 class="text-2xl text-wrap font-semibold text-blue-500 hover:underline cursor-pointer">
+            {{ dish.name }}
+        </h2>
+        <p class="text-sm text-gray-600">{{ dish.description }}</p>
+        <hr>
     </div>
-    {% endfor %}
 </div>
+{% endfor %}
 {% endblock %}

@@ -4,12 +4,9 @@
 
 {% block content %}
 <div>
-    <h1>Add to menu</h1>
+    <h1 class="text-3xl text-bold">Add to menu</h1>
     <form method="POST">
         {% csrf_token %}
-        <div>
-            <button type="submit">Add to Menu</button>
-        </div>
         <table>
             <thead>
                 <tr>
@@ -41,6 +38,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div>
+            <button type="submit">Add to Menu</button>
+        </div>
     </form>
 </div>
 {% endblock %}

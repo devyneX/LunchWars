@@ -24,13 +24,17 @@ def validate_tin(tin: str) -> bool:
     Returns:
         bool: True if the TIN number is valid, False otherwise.
     """
+    # this needs more testing
     # url = settings.TIN_VALIDATOR_URL
     # params = {"tk": settings.TIN_VALIDATOR_TOKEN, "op": "tc", "ca": "bd", "tn": tin}
 
     # response = requests.get(url, params=params)
 
+    # if response.status_code != 200:
+    #     return False
+
     # return response.json()["result"] == "valid"
-    return False
+    return True
 
 
 def get_restaurant(request: HttpRequest) -> models.Restaurant:

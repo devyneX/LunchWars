@@ -4,12 +4,13 @@ from django.db.models.query import QuerySet
 from django.views import View
 from django.views.generic import CreateView, ListView, DetailView
 from django.urls import reverse_lazy
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.http import HttpRequest, HttpResponse
 from django.forms.models import BaseModelForm
 from django.forms import modelformset_factory
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
 
 from restaurants import utils as restaurant_utils
 from restaurants import models as restaurant_models
@@ -31,9 +32,49 @@ class Participate(View, restaurant_utils.RestaurantRepresentiveRequiredMixin):
         )
 
         if not menu:
-            return redirect("wars:create-menu")
+            if models.War.eligible(restaurant_utils.get_restaurant(request)):
+                return redirect("wars:create-menu")
+                # need to implement this so that the user can use previous menu to directly participate
+                # return render(
+                #     request,
+                #     "wars/participate.html",
+                #     {"form": forms.ParticipateForm(request=request)},
+                # )
+            else:
+                messages.error(
+                    request,
+                    "You are not eligible to participate in today's war. You must have lost the last two wars.",
+                )
+                return redirect("wars:leaderboard")
 
         if menu.dishes.count() == 0:
+            return redirect("wars:add-to-menu")
+
+        return redirect("wars:menu-detail", menu.pk)
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        """Participate in the war."""
+        menu = (
+            models.War.get()
+            .menus.filter(restaurant=restaurant_utils.get_restaurant(request))
+            .first()
+        )
+
+        if menu:
+            if menu.dishes.count() == 0:
+                messages.error(request, "You must select at least one dish.")
+                return redirect("wars:add-to-menu")
+            else:
+                return redirect("wars:menu-detail", menu.pk)
+
+        form = forms.ParticipateForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, "wars/participate.html", {"form": form})
+
+        models.War.get().menus.add(form.cleaned_data["menu"])
+        if menu.dishes.count() == 0:
+            messages.error(request, "You must select at least one dish.")
             return redirect("wars:add-to-menu")
 
         return redirect("wars:menu-detail", menu.pk)
@@ -216,5 +257,7 @@ class LeaderboardView(ListView):
 
     def get_queryset(self) -> QuerySet[Any]:
         """Return the menus for the current war."""
-        queryset = super().get_queryset()
+        queryset = models.War.get().menus.all()
+        queryset = queryset.annotate(votes_count=Count("votes"))
+        queryset = queryset.order_by("-votes_count")
         return queryset.filter(wars=models.War.get())
