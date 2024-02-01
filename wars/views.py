@@ -9,15 +9,17 @@ from django.http import HttpRequest, HttpResponse
 from django.forms.models import BaseModelForm
 from django.forms import modelformset_factory
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from restaurants import utils as restaurant_utils
 from restaurants import models as restaurant_models
+from employees import utils as employee_utils
 from . import models
 from . import forms
 
 
 # Create your views here.
-class Participate(View):
+class Participate(View, restaurant_utils.RestaurantRepresentiveRequiredMixin):
     """View for participating in a war."""
 
     def get(self, request: HttpRequest) -> HttpResponse:
@@ -37,7 +39,7 @@ class Participate(View):
         return redirect("wars:menu-detail", menu.pk)
 
 
-class MenuCreateView(CreateView):
+class MenuCreateView(CreateView, restaurant_utils.RestaurantRepresentiveRequiredMixin):
     """View for creating a menu."""
 
     model = models.Menu
@@ -69,7 +71,7 @@ class MenuCreateView(CreateView):
         return redirect("wars:add-to-menu")
 
 
-class AddToMenuView(ListView):
+class AddToMenuView(ListView, restaurant_utils.RestaurantRepresentiveRequiredMixin):
     """View for adding dishes to a menu."""
 
     model = restaurant_models.Dish
@@ -136,7 +138,7 @@ class AddToMenuView(ListView):
         return redirect("wars:leaderboard")
 
 
-class MenuDetailView(DetailView):
+class MenuDetailView(DetailView, LoginRequiredMixin):
     """View for showing the menu."""
 
     model = models.Menu
@@ -147,7 +149,62 @@ class MenuDetailView(DetailView):
         """Return the context data."""
         context = super().get_context_data(**kwargs)
         context["dishes"] = self.object.dishes.all()
+        if self.request.user.is_employee:
+            context["voted"] = self.object.votes.filter(
+                employee=self.request.user.employee
+            ).exists()
         return context
+
+
+class ParticipantView(ListView, employee_utils.EmployeeRequiredMixin):
+    """View for showing the participant."""
+
+    model = models.Menu
+    template_name = "wars/participants.html"
+    context_object_name = "menus"
+
+    def get_queryset(self) -> QuerySet[Any]:
+        """Return the restaurants for the current war."""
+        queryset = models.War.get().menus.all()
+        return queryset
+
+
+class VoteView(View, employee_utils.EmployeeRequiredMixin):
+    """View for voting on a menu."""
+
+    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        """Return the vote page."""
+        menu = models.Menu.objects.get(pk=pk)
+        if not menu:
+            return redirect("wars:participants")
+
+        if not menu.wars.filter(pk=models.War.get().pk).exists():
+            return redirect("wars:participants")
+
+        if menu.votes.filter(employee=self.request.user.employee).exists():
+            return redirect("wars:participants")
+
+        menu.votes.create(employee=self.request.user.employee, war=models.War.get())
+        return redirect("wars:participants")
+
+
+class UnvoteView(View, employee_utils.EmployeeRequiredMixin):
+    """View for unvoting on a menu."""
+
+    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        """Return the vote page."""
+        menu = models.Menu.objects.get(pk=pk)
+        if not menu:
+            return redirect("wars:participants")
+
+        if not menu.wars.filter(pk=models.War.get().pk).exists():
+            return redirect("wars:participants")
+
+        if not menu.votes.filter(employee=self.request.user.employee).exists():
+            return redirect("wars:participants")
+
+        menu.votes.filter(employee=self.request.user.employee).delete()
+        return redirect("wars:participants")
 
 
 class LeaderboardView(ListView):

@@ -17,5 +17,12 @@
             {% endfor %}
         </ul>
     </div>
+    {% if request.user.is_employee %}
+    {% if voted %}
+    <button onclick="location.href=`{% url 'wars:unvote' menu.pk %}`">Unvote</button>
+    {% else %}
+    <button onclick="location.href=`{% url 'wars:vote' menu.pk %}`">Vote</button>
+    {% endif %}
+    {% endif %}
 </div>
 {% endblock %}

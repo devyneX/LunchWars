@@ -21,10 +21,12 @@ class SignUpView(FormView):
         if form.cleaned_data["user_type"] == "employee":
             models.Employee.objects.create(user=user)
             user.is_employee = True
+            user.save()
 
         elif form.cleaned_data["user_type"] == "restaurant_representative":
             models.RestaurantRepresentative.objects.create(user=user)
             user.is_restaurant_representative = True
+            user.save()
 
         login(self.request, user)
 

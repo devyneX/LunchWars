@@ -27,11 +27,11 @@ class Menu(models.Model):
     dishes = models.ManyToManyField("restaurants.Dish", related_name="menus")
 
 
-# class Vote(models.Model):
-#     """Model for vote"""
+class Vote(models.Model):
+    """Model for vote"""
 
-#     employee = models.ForeignKey(
-#         "accounts.Employee", on_delete=models.CASCADE, related_name="votes"
-#     )
-#     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name="votes")
-#     war = models.ForeignKey(War, on_delete=models.CASCADE, related_name="votes")
+    employee = models.ForeignKey(
+        "accounts.Employee", on_delete=models.CASCADE, related_name="votes"
+    )
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name="votes")
+    war = models.ForeignKey(War, on_delete=models.CASCADE, related_name="votes")

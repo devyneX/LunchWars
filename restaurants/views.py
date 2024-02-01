@@ -12,7 +12,7 @@ from . import forms
 
 
 # Create your views here.
-class RestaurantCreateView(CreateView, utils.RestaurantRepresetiveRequiredMixin):
+class RestaurantCreateView(CreateView, utils.RestaurantRepresentiveRequiredMixin):
     """View for creating a restaurant."""
 
     model = models.Restaurant
@@ -38,7 +38,7 @@ class RestaurantCreateView(CreateView, utils.RestaurantRepresetiveRequiredMixin)
         return self.invalid_tin(form, "TIN number is not valid.")
 
 
-class RestaurantDashboardView(View, utils.RestaurantRepresetiveRequiredMixin):
+class RestaurantDashboardView(View, utils.RestaurantRepresentiveRequiredMixin):
     """View for showing Restaurant Details"""
 
     def get(self, request: HttpRequest) -> HttpResponse:
@@ -53,7 +53,7 @@ class RestaurantDashboardView(View, utils.RestaurantRepresetiveRequiredMixin):
         )
 
 
-class AddDishView(CreateView, utils.RestaurantRepresetiveRequiredMixin):
+class AddDishView(CreateView, utils.RestaurantRepresentiveRequiredMixin):
     """View for adding a dish."""
 
     model = models.Dish
@@ -81,7 +81,7 @@ class AddDishView(CreateView, utils.RestaurantRepresetiveRequiredMixin):
 #         return models.Dish.objects.filter(restaurant=restaurant)
 
 
-class DishListView(ListView, utils.RestaurantRepresetiveRequiredMixin):
+class DishListView(ListView, utils.RestaurantRepresentiveRequiredMixin):
     """View for listing dishes."""
 
     model = models.Dish

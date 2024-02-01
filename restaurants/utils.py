@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from . import models
 
 
-class RestaurantRepresetiveRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+class RestaurantRepresentiveRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     """Mixin for views that require a restaurant representative."""
 
     def test_func(self) -> bool:
