@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 
 from . import utils
 from . import models
+from . import forms
 
 
 # Create your views here.
@@ -56,7 +57,6 @@ class AddDishView(CreateView, utils.RestaurantRepresetiveRequiredMixin):
     """View for adding a dish."""
 
     model = models.Dish
-    fields = ["name", "description"]
     success_url = reverse_lazy("restaurants:dashboard")
     template_name = "restaurants/add_dish.html"
 

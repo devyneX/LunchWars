@@ -9,17 +9,22 @@ class War(models.Model):
 
     date = models.DateField(default=timezone.now, primary_key=True)
 
+    @classmethod
+    def get(cls) -> models.Model:
+        """Return today's war."""
+        return cls.objects.get(date=timezone.now().date())
 
-# class Menu(models.Model):
-#     """Model for a menu."""
 
-#     title = models.CharField(max_length=50)
-#     description = models.CharField(max_length=200)
-#     wars = models.ManyToManyField(War, related_name="menus")
-#     restaurant = models.ForeignKey(
-#         "restaurants.Restaurant", on_delete=models.CASCADE, related_name="menus"
-#     )
-#     dishes = models.ManyToManyField("restaurants.Dish", related_name="menus")
+class Menu(models.Model):
+    """Model for a menu."""
+
+    title = models.CharField(max_length=50)
+    description = models.CharField(max_length=200)
+    wars = models.ManyToManyField(War, related_name="menus")
+    restaurant = models.ForeignKey(
+        "restaurants.Restaurant", on_delete=models.CASCADE, related_name="menus"
+    )
+    dishes = models.ManyToManyField("restaurants.Dish", related_name="menus")
 
 
 # class Vote(models.Model):

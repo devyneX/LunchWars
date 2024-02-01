@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Add to menu{% endblock %}
+
+{% block content %}
+<div>
+    <h1>Add to menu</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            <button type="submit">Add to Menu</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Select
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ formset.management_form }}
+                {% for dish, form in dishes_and_forms %}
+                <tr>
+                    <td>
+                        {{form.selected}}{{ form.id }}
+                    </td>
+                    <td>
+                        {{ dish.name }}
+                    </td>
+                    <td>
+                        {{ dish.description }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}

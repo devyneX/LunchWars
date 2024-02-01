@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Menu{% endblock %}
+
+{% block content %}
+<div>
+    <h1>{{ menu.title }} by {{ menu.restaurant.name }}</h1>
+    <div>
+        <h2>Dishes</h2>
+        <ul>
+            {% for dish in dishes %}
+            <li>
+                {{ dish.name }}
+                {{ dish.description }}
+            </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
