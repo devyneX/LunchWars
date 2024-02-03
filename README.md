@@ -29,18 +29,29 @@ DB_HOST= <your database host>
 DB_PORT= <your database port no>
 ```
 - Install redis on your machine and start the redis server
-- Open up a new terminal. Ensure that you have the virtual environment activated there. Start a celery worker using the following command
-```bash
-celery -A LunchWars worker --pool=solo -l INFO
-```
-- Open another new terminal and activate your virtual environment. Start a celery beat using the following command
-```bash
-celery -A LunchWars beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-```
-- Run the following commands to migrate the database and start the server
+- Run the following commands to migrate the database.
 ```bash
 python manage.py migrate
+```
+- Install tailwind dependencies and start tailwind using the following commands
+```bash
+python manage.py tailwind install
+python manage.py tailwind start
+```
+- Open a new terminal. Start the django server using the following commands
+```bash
+conda activate lunchwars
 python manage.py runserver
+```
+- Open up a new terminal. Start a celery worker using the following commands
+```bash
+conda activate lunchwars
+celery -A LunchWars worker --pool=solo -l INFO
+```
+- Open another terminal. Start a celery beat using the following commands
+```bash
+conda activate lunchwars
+celery -A LunchWars beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
 ```
 - Open your browser and navigate to `http://localhost:8000/` to view the app
 
